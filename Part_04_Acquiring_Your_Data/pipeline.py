@@ -18,7 +18,9 @@ MAIN_DATA_DIR = Path(__file__).parent.parent / "data" / "project"
 MERGED_RAW_LOGS_PATH = MAIN_DATA_DIR / "merged_raw_logs.txt"
 MERGED_CSV_LOGS_PATH = MAIN_DATA_DIR / "merged_logs.csv"
 IP_INFO_CSV = MAIN_DATA_DIR / "ip_info.csv"
-IP_API_IS_API_KEY = os.getenv("IP_API_IS_API_KEY")
+IP_API_IS_API_KEY = os.getenv(
+    "IP_API_IS_API_KEY",
+)  # v to spremenljivko mi shrani ta KEY = secret = preveri kje se nahaja .env in vzame to vrednost ne da jo zapiše in jo uporabi to geslo
 
 
 def get_all_logs_paths(main_dir: Path, pattern: str) -> list[Path]:
@@ -107,7 +109,7 @@ def generate_ip_info_dataset(unique_ips: list[str], output_path: Path) -> None:
     ip_data = []
     for unique_ip in unique_ips:
         try:
-            url = f"https://api.ipapi.is?q={unique_ip}&key={IP_API_IS_API_KEY}"
+            url = f"https://api.ipapi.is?q={unique_ip}&key={IP_API_IS_API_KEY}"  # API pazi ker se ne sme shraniti public = dostopno je hekerjem
             data = requests.get(url, timeout=15)
             if data.status_code == requests.codes.ok:
                 logger.debug(f"---> Processing IP {unique_ip}.")
@@ -150,7 +152,7 @@ def generate_ip_info_dataset(unique_ips: list[str], output_path: Path) -> None:
                         country,
                         city,
                         latitude,
-                        longitude,
+                        longitude,  # tapple vgradimo v list
                     ),
                 )
             else:
